@@ -1,52 +1,107 @@
-// App.js
 import React, { useState } from 'react';
+import Editor from '@monaco-editor/react'
 import './styles.css';
 
 function App() {
   const [code, setCode] = useState('');
   const [compiledCode, setCompiledCode] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('');
+  const [selectedTheme, setSelectedTheme] = useState('');
 
-  const handleCompile = () => {
-    // 여기서는 간단히 입력된 코드를 그대로 컴파일했다고 가정합니다.
-    // 실제로는 선택된 언어에 따라 다른 컴파일러를 사용하거나 API를 호출할 수 있습니다.
-    setCompiledCode(code);
+  const handleCompile = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:3000/compile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          language: selectedLanguage,
+          code: code,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      setCompiledCode(data.compiledCode);
+    } catch (error) {
+      console.error('Error during compilation:', error);
+      setCompiledCode('Error during compilation');
+    }
   };
 
   return (
     <div className="App">
       <h1>코드 컴파일러</h1>
 
-      <div className="language_select">
-        <label htmlFor="language">언어를 선택하세요</label>
-        <br></br>
-        <select
-          id="language"
-          value={selectedLanguage}
-          onChange={(e) => setSelectedLanguage(e.target.value)}
-        >
-          <option value="">(언어 선택)</option>
-          <option value="c">C</option>
-          <option value="cpp">C++</option>
-          <option value="rust">Rust</option>
-          <option value="go">Go</option>
-        </select>
-      </div>
+      <div id="whole">
+        <form onSubmit={handleCompile} method='post'>
+          <div className="form_input">
+            <label htmlFor="id_language">언어를 선택하세요</label>
+            <select
+              id="id_language"
+              name="language"
+              value={selectedLanguage}
+              onChange={(e) => setSelectedLanguage(e.target.value)}
+            >
+              <option value="default">(언어 선택)</option>
+              <option value="cpp">C++</option>
+              <option value="python">Python</option>
+              <option value="rust">Rust</option>
+              <option value="go">Go</option>
+            </select>
+          </div>
 
-      <div className="code-input">
-        <h2>코드 입력</h2>
-        <textarea
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          placeholder="코드를 입력하세요"
-        ></textarea>
-        <button onClick={handleCompile}>컴파일</button>
+          <div className="form_input">
+            <label htmlFor="id_theme">테마를 선택하세요</label>
+            <select
+              id="id_theme"
+              name="theme"
+              value={selectedTheme}
+              onChange={(e) => setSelectedTheme(e.target.value)}
+            >
+              <option value="light">Light version</option>
+              <option value="vs-dark">Dark version</option>
+            </select>
+          </div>
+
+          <div className="form_input">
+            <label htmlFor="id_input">코드를 입력하세요</label>
+            <Editor
+              theme={selectedTheme}
+              height="40vh"
+              language={selectedLanguage || 'plaintext'}
+              value={code}
+              onChange={(value) => setCode(value || '')}
+              options={{
+                fontSize: 15,
+                fontWeight: 'bold',
+                minimap: {enabled: false},
+                scrollbar: {
+                  vertical: 'auto',
+                  horizontal: 'auto'
+                }
+              }}
+              loading="잠시만 기다려주세요..."
+              defaultValue="// 코드를 입력하세요 //"/>
+          </div>
+          
+          <button type="submit">컴파일</button>
+          <button type="reset" onClick={() => setCode('// 코드를 입력하세요 //')}>초기화</button>
+
+        </form>
+
+        <div className="code_output">
+          <label htmlFor="id_output">컴파일 결과</label>
+          <pre>{compiledCode}</pre>
+        </div>
       </div>
       
-      <div className="compiled-output">
-        <h2>컴파일 결과</h2>
-        <pre>{compiledCode}</pre>
-      </div>
     </div>
   );
 }
