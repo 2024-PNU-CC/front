@@ -12,7 +12,7 @@ function App() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/compile', {
+      const response = await fetch('https://cc.fiene.dev/submit/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,8 +91,8 @@ function App() {
               defaultValue="// 코드를 입력하세요 //"/>
           </div>
           
-          <button type="submit">컴파일</button>
-          <button type="reset" onClick={() => setCode('// 코드를 입력하세요 //')}>초기화</button>
+          <button id="btn_submit" type="submit">컴파일</button>
+          <button id="btn_reset" type="reset" onClick={() => setCode('// 코드를 입력하세요 //')}>초기화</button>
 
         </form>
 
