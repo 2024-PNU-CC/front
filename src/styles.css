@@ -59,7 +59,6 @@ select {
 }
 
 button {
-  background-color: #5c67f2;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -71,6 +70,15 @@ button {
   cursor: pointer;
   border-radius: 4px;
 }
+
+#btn_submit{
+  background-color: #0067D3;
+}
+
+#btn_reset{
+  background-color: #d30000dc;
+}
+
 /* 
 .code-input textarea {
   flex: 1;
