@@ -12,11 +12,10 @@ function App() {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://cc.fiene.dev/submit/', {
+      const response = await fetch('https://cc.fiene.dev/', {
+        credentials: 'include',
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        // mode: 'no-cors',
         body: JSON.stringify({
           language: selectedLanguage,
           code: code,
@@ -71,7 +70,7 @@ function App() {
           </div>
 
           <div className="form_input">
-            <label htmlFor="id_input">코드를 입력하세요</label>
+            <label>코드를 입력하세요</label>
             <Editor
               theme={selectedTheme}
               height="40vh"
@@ -97,7 +96,7 @@ function App() {
         </form>
 
         <div className="code_output">
-          <label htmlFor="id_output">컴파일 결과</label>
+          <label>컴파일 결과</label>
           <pre>{compiledCode}</pre>
         </div>
       </div>

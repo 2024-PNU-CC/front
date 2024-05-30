@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 name: github pages
+=======
+name: deploy
+>>>>>>> 22b63c338da6698467e806502a86df96ba5138dc
 
 on:
   push:
