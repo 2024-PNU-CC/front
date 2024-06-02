@@ -12,7 +12,7 @@ function App() {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://cc.fiene.dev/send_code/', {
+      const response = await fetch('https://cc.fiene.dev/', {
         credentials: 'include',
         method: 'POST',
         // mode: 'no-cors',
