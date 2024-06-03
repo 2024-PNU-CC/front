@@ -17,14 +17,11 @@ function App() {
     setRequestId(uniqueId);  // 요청 ID 설정
 
     try {
-<<<<<<< HEAD
-      const response = await fetch('http://cc.fiene.dev/api/my-endpoint/', {
-=======
-      const response = await fetch('https://cc.fiene.dev/', {
-        credentials: 'include',
->>>>>>> 8fb632caa891243c1e60c34c855075d13da3e181
+      const response = await fetch('http://fc.fiene.dev/api/my-endpoint/', {
         method: 'POST',
-        // mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           id: uniqueId,
           language: selectedLanguage,
@@ -46,7 +43,7 @@ function App() {
   useEffect(() => {
     const checkResult = async (uniqueId) => {
       try {
-        const response = await fetch(`http://cc.fiene.dev/api/result/${uniqueId}`);
+        const response = await fetch(`http://fc.fiene.dev/api/result/${uniqueId}`);
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -136,11 +133,7 @@ function App() {
               defaultValue="// 코드를 입력하세요 //"
             />
           </div>
-<<<<<<< HEAD
 
-=======
-          
->>>>>>> 8fb632caa891243c1e60c34c855075d13da3e181
           <button id="btn_submit" type="submit">컴파일</button>
           <button id="btn_reset" type="reset" onClick={() => setCode('// 코드를 입력하세요 //')}>초기화</button>
 
@@ -148,11 +141,7 @@ function App() {
 
         <div className="code_output">
           <label>컴파일 결과</label>
-<<<<<<< HEAD
           {compiledCode && <p>{compiledCode}</p>}
-=======
-          <pre>{compiledCode}</pre>
->>>>>>> 8fb632caa891243c1e60c34c855075d13da3e181
         </div>
       </div>
     </div>
