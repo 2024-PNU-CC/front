@@ -1,8 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 name: github pages
 =======
 name: deploy
 >>>>>>> 22b63c338da6698467e806502a86df96ba5138dc
+=======
+name: deploy
+>>>>>>> 8fb632caa891243c1e60c34c855075d13da3e181
 
 on:
   push:
@@ -24,6 +28,10 @@ jobs:
             ${{ runner.os }}-node-
       - run: npm ci
       - run: npm run build
+<<<<<<< HEAD
+=======
+      - run: mv ./CNAME ./build
+>>>>>>> 8fb632caa891243c1e60c34c855075d13da3e181
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

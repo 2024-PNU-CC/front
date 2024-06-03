@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import Editor from '@monaco-editor/react'
+import React, { useState, useEffect } from 'react';
+import Editor from '@monaco-editor/react';
+import { v4 as uuidv4 } from 'uuid';
 import './styles.css';
 
 function App() {
@@ -7,18 +8,24 @@ function App() {
   const [compiledCode, setCompiledCode] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [selectedTheme, setSelectedTheme] = useState('');
+  const [requestId, setRequestId] = useState(null);
 
   const handleCompile = async (e) => {
     e.preventDefault();
 
+    const uniqueId = uuidv4();
+    setRequestId(uniqueId);  // 요청 ID 설정
+
     try {
-      const response = await fetch('https://cc.fiene.dev/', {
-        credentials: 'include',
+      const response = await fetch('http://cc.fiene.dev/api/my-endpoint/', {
         method: 'POST',
-        // mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
+          id: uniqueId,
           language: selectedLanguage,
-          code: code,
+          code: code
         }),
       });
 
@@ -26,13 +33,49 @@ function App() {
         throw new Error('Network response was not ok');
       }
 
-      const data = await response.json();
-      setCompiledCode(data.compiledCode);
+      setCompiledCode('Compiling...');  // 컴파일 중 메시지 설정
     } catch (error) {
       console.error('Error during compilation:', error);
       setCompiledCode('Error during compilation');
     }
   };
+
+  useEffect(() => {
+    const checkResult = async (uniqueId) => {
+      try {
+        const response = await fetch(`http://cc.fiene.dev/api/result/${uniqueId}`);
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        if (data.result) {
+          setCompiledCode(data.result);
+          return true; // 결과를 찾으면 true 반환
+        } else {
+          setCompiledCode('Result not ready yet, retrying...');
+          return false; // 결과를 찾지 못하면 false 반환
+        }
+      } catch (error) {
+        console.error('Error fetching result:', error);
+        setCompiledCode('Error fetching result');
+        return false; // 오류 발생 시 false 반환
+      }
+    };
+
+    let interval;
+    if (requestId) {
+      interval = setInterval(async () => {
+        const resultFound = await checkResult(requestId);
+        if (resultFound) {
+          clearInterval(interval); // 결과를 찾으면 반복 중지
+        }
+      }, 2000); // 2초마다 결과 체크
+    }
+
+    return () => clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 정리
+  }, [requestId]);
 
   return (
     <div className="App">
@@ -80,16 +123,17 @@ function App() {
               options={{
                 fontSize: 15,
                 fontWeight: 'bold',
-                minimap: {enabled: false},
+                minimap: { enabled: false },
                 scrollbar: {
                   vertical: 'auto',
                   horizontal: 'auto'
                 }
               }}
               loading="잠시만 기다려주세요..."
-              defaultValue="// 코드를 입력하세요 //"/>
+              defaultValue="// 코드를 입력하세요 //"
+            />
           </div>
-          
+
           <button id="btn_submit" type="submit">컴파일</button>
           <button id="btn_reset" type="reset" onClick={() => setCode('// 코드를 입력하세요 //')}>초기화</button>
 
@@ -97,10 +141,9 @@ function App() {
 
         <div className="code_output">
           <label>컴파일 결과</label>
-          <pre>{compiledCode}</pre>
+          {compiledCode && <p>{compiledCode}</p>}
         </div>
       </div>
-      
     </div>
   );
 }
