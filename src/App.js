@@ -33,7 +33,7 @@ function App() {
         throw new Error('Network response was not ok');
       }
 
-      setCompiledCode('Compiling...');  // 컴파일 중 메시지 설정
+      setCompiledCode('Compiling...');
     } catch (error) {
       console.error('Error during compilation:', error);
       setCompiledCode('Error during compilation');
