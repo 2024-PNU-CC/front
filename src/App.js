@@ -141,7 +141,7 @@ function App() {
 
         <div className="code_output">
           <label>컴파일 결과</label>
-          {compiledCode && <p>{compiledCode}</p>}
+          {compiledCode && <pre>{compiledCode}</pre>}
         </div>
       </div>
     </div>
