@@ -17,7 +17,7 @@ function App() {
     setRequestId(uniqueId);  // 요청 ID 설정
 
     try {
-      const response = await fetch('http://cc.fiene.dev/api/my-endpoint/', {
+      const response = await fetch('https://cc.fiene.dev/api/my-endpoint/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ function App() {
   useEffect(() => {
     const checkResult = async (uniqueId) => {
       try {
-        const response = await fetch(`http://cc.fiene.dev/api/result/${uniqueId}`);
+        const response = await fetch(`https://cc.fiene.dev/api/result/${uniqueId}`);
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
