@@ -9,6 +9,7 @@ function App() {
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [selectedTheme, setSelectedTheme] = useState('');
   const [requestId, setRequestId] = useState(null);
+  const [resetFlag, setResetFlag] = useState(null);
 
   const handleCompile = async (e) => {
     e.preventDefault();
@@ -77,6 +78,18 @@ function App() {
     return () => clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 정리
   }, [requestId]);
 
+  const handleReset = () => {
+    if(resetFlag){
+      clearInterval(resetFlag);
+    }
+    setRequestId(null); // 요청 ID 초기화
+    setCode('// 코드를 입력하세요 //');
+    setCompiledCode('');
+    setSelectedLanguage('');
+    setSelectedTheme('');
+  }
+
+  
   return (
     <div className="App">
       <h1>코드 컴파일러</h1>
@@ -135,7 +148,7 @@ function App() {
           </div>
 
           <button id="btn_submit" type="submit">컴파일</button>
-          <button id="btn_reset" type="reset" onClick={() => setCode('// 코드를 입력하세요 //')}>초기화</button>
+          <button id="btn_reset" type="reset" onClick={handleReset}>초기화</button>
 
         </form>
 
