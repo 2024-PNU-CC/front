@@ -9,7 +9,7 @@ function App() {
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [selectedTheme, setSelectedTheme] = useState('');
   const [requestId, setRequestId] = useState(null);
-  const [resetFlag, setResetFlag] = useState(null);
+  const [resetFlag] = useState(null);
 
   const handleCompile = async (e) => {
     e.preventDefault();
