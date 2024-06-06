@@ -88,7 +88,6 @@ function App() {
     setSelectedLanguage('');
     setSelectedTheme('');
   }
-
   
   return (
     <div className="App">
