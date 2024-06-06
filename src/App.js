@@ -88,6 +88,10 @@ function App() {
     setSelectedLanguage('');
     setSelectedTheme('');
   }
+
+  const languageAliasToRaw = {
+    'js': 'javascript'
+  }
   
   return (
     <div className="App">
@@ -105,9 +109,10 @@ function App() {
             >
               <option value="default">(언어 선택)</option>
               <option value="cpp">C++</option>
+              <option value="c">C</option>
+              <option value="js">Javascript</option>
               <option value="python">Python</option>
               <option value="rust">Rust</option>
-              <option value="go">Go</option>
             </select>
           </div>
 
@@ -129,7 +134,7 @@ function App() {
             <Editor
               theme={selectedTheme}
               height="40vh"
-              language={selectedLanguage || 'plaintext'}
+              language={languageAliasToRaw[selectedLanguage] || selectedLanguage || 'plaintext'}
               value={code}
               onChange={(value) => setCode(value || '')}
               options={{
